@@ -1,0 +1,2 @@
+# comparator
+Interactive comparing widget
