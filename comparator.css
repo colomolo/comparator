@@ -8,13 +8,14 @@
   position: absolute;
   top: 0; bottom: 0;
   right: 0;
+  box-sizing: border-box;
+  border-left: 1px solid rgba(255, 100, 100, .5);
   overflow: hidden;
   z-index: 2;
 }
 
-.comparator .is-divided {
-  box-sizing: border-box;
-  border-left: 1px solid rgba(255, 255, 255, .5);
+.comparator .centered {
+  transition: width 1s .4s ease-in-out;
 }
 
 .comparator img {

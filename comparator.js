@@ -1,4 +1,4 @@
-jQuery(function() {
+$(function() {
   'use strict';
 
   function Comparator($el) {
@@ -18,27 +18,38 @@ jQuery(function() {
   Comparator.prototype.setListeners = function() {
     var comparator = this;
 
-    jQuery(window).resize(function() {
+    $(window).resize(function() {
       comparator.calculateSizes();
     });
 
     comparator.$el.on('mousemove', function (e) {
       comparator.moveDivider(e);
     });
+
+    comparator.$el.on('mouseleave', function () {
+      comparator.centerDivider();
+    });
   }
 
   Comparator.prototype.moveDivider = function(e) {
     var mouseX = Math.round(this.getRelativeMouseX(e));
 
-    this.$right.addClass('is-divided');
+    this.$right.removeClass('centered');
     this.$right.css('width', mouseX);
+  }
+
+  Comparator.prototype.centerDivider = function() {
+    var center = this.width / 2;
+
+    this.$right.addClass('centered');
+    this.$right.css('width', center);
   }
 
   Comparator.prototype.getRelativeMouseX = function(e) {
     return Math.min(this.$el.offset().left + this.width - e.clientX, this.width);
   }
 
-  jQuery('.comparator').each(function() {
-    new Comparator(jQuery(this));
+  $('.comparator').each(function() {
+    new Comparator($(this));
   });
 });
