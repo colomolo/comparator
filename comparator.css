@@ -1,10 +1,13 @@
-.comparator {position: relative;}
+.comparator {
+  position: relative;
+}
 
-.comparator .comp-left {
+.comparator .comparator-left {
   position: relative;
   z-index: 1;
 }
-.comparator .comp-right {
+
+.comparator .comparator-right {
   position: absolute;
   top: 0; bottom: 0;
   right: 0;
@@ -24,11 +27,11 @@
   vertical-align: top;
 }
 
-.comparator .comp-left img {
+.comparator .comparator-left img {
   width: 100%;
 }
 
-.comparator .comp-right img {
+.comparator .comparator-right img {
   position: absolute;
   top: 0; bottom: 0;
   right: 0;

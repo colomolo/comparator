@@ -3,11 +3,22 @@ $(function() {
 
   function Comparator($el) {
     this.$el = $el;
-    this.$right = this.$el.find('.comp-right');
-    this.$rightImg =  this.$right.find('img');
+
+    this.$blocks = this.$el.children('img');
+    this.$leftImg = this.$blocks.eq(0);
+    this.$rightImg = this.$blocks.eq(1);
+
+    this.init();
+    this.setListeners();
+  }
+
+  Comparator.prototype.init = function() {
+    this.$leftImg.wrap('<div class="comparator-left"></div>');
+    this.$rightImg.wrap('<div class="comparator-right"></div>');
+    this.$leftSide = this.$leftImg.closest('.comparator-left');
+    this.$rightSide = this.$rightImg.closest('.comparator-right');
 
     this.calculateSizes();
-    this.setListeners();
   }
 
   Comparator.prototype.calculateSizes = function() {
@@ -26,23 +37,25 @@ $(function() {
       comparator.moveDivider(e);
     });
 
-    comparator.$el.on('mouseleave', function () {
-      comparator.centerDivider();
-    });
+    if (this.$el.data('return')) {
+      comparator.$el.on('mouseleave', function () {
+        comparator.centerDivider();
+      });
+    }
   }
 
   Comparator.prototype.moveDivider = function(e) {
     var mouseX = Math.round(this.getRelativeMouseX(e));
 
-    this.$right.removeClass('centered');
-    this.$right.css('width', mouseX);
+    this.$rightSide.removeClass('centered');
+    this.$rightSide.css('width', mouseX);
   }
 
   Comparator.prototype.centerDivider = function() {
     var center = this.width / 2;
 
-    this.$right.addClass('centered');
-    this.$right.css('width', center);
+    this.$rightSide.addClass('centered');
+    this.$rightSide.css('width', center);
   }
 
   Comparator.prototype.getRelativeMouseX = function(e) {
