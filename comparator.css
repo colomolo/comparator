@@ -2,22 +2,32 @@
   position: relative;
 }
 
-.comparator .comparator-left {
+.comparator .comparator-first {
   position: relative;
   z-index: 1;
 }
 
-.comparator .comparator-right {
+.comparator .comparator-second {
   position: absolute;
-  top: 0; bottom: 0;
-  right: 0;
+  bottom: 0;
   box-sizing: border-box;
-  border-left: 1px solid rgba(255, 100, 100, .5);
   overflow: hidden;
   z-index: 2;
 }
 
-.comparator .centered {
+.comparator.comparator-vertical .comparator-second {
+  top: 0;
+  right: 0;
+  border-left: 1px solid rgba(255, 100, 100, .5);
+}
+
+.comparator.comparator-horizontal .comparator-second {
+  left: 0;
+  right: 0;
+  border-left: 1px solid rgba(255, 100, 100, .5);
+}
+
+.comparator .comparator-centered {
   transition: width 1s .4s ease-in-out;
 }
 
@@ -27,13 +37,14 @@
   vertical-align: top;
 }
 
-.comparator .comparator-left img {
+.comparator .comparator-first img {
   width: 100%;
 }
 
-.comparator .comparator-right img {
+.comparator .comparator-second img {
   position: absolute;
-  top: 0; bottom: 0;
+  top: 0;
+  bottom: 0;
   right: 0;
   max-width: none;
 }

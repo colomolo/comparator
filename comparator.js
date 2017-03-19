@@ -1,65 +1,81 @@
 $(function() {
   'use strict';
 
+  const CENTERED_CLASS = 'comparator-centered';
+  const DEFAULT_ORIENTATION = 'comparator-vertical';
+
   function Comparator($el) {
     this.$el = $el;
+    this.orientation = DEFAULT_ORIENTATION;
 
     this.$blocks = this.$el.children('img');
-    this.$leftImg = this.$blocks.eq(0);
-    this.$rightImg = this.$blocks.eq(1);
+    this.$firstImg = this.$blocks.eq(0);
+    this.$secondImg = this.$blocks.eq(1);
+    
+    this.offsets = {
+      top: this.$el.offset().top,
+      left: this.$el.offset().left,
+    };
 
-    this.init();
+    this.construct();
+    this.calcSizes();
+    this.centerDivider();
     this.setListeners();
   }
 
-  Comparator.prototype.init = function() {
-    this.$leftImg.wrap('<div class="comparator-left"></div>');
-    this.$rightImg.wrap('<div class="comparator-right"></div>');
-    this.$leftSide = this.$leftImg.closest('.comparator-left');
-    this.$rightSide = this.$rightImg.closest('.comparator-right');
+  Comparator.prototype.construct = function() {
+    if (this.$el.data('orientation') === 'vertical') {
+      this.orientation = 'comparator-vertical';
+    } else if (this.$el.data('orientation') === 'horizontal') {
+      this.orientation = 'comparator-horizontal';
+    }
 
-    this.calculateSizes();
+    this.$el.addClass(this.orientation);
+
+    this.$firstImg.wrap('<div class="comparator-first"></div>');
+    this.$secondImg.wrap('<div class="comparator-second"></div>');
+
+    this.$firstSide = this.$firstImg.closest('.comparator-first');
+    this.$secondSide = this.$secondImg.closest('.comparator-second');
   }
 
-  Comparator.prototype.calculateSizes = function() {
+  Comparator.prototype.calcSizes = function() {
     this.width = this.$el.width();
-    this.$rightImg.css('width', this.width);
+    this.height = this.$el.height();
+    this.$secondImg.css({'width': this.width});
   }
 
   Comparator.prototype.setListeners = function() {
-    var comparator = this;
-
-    $(window).resize(function() {
-      comparator.calculateSizes();
+    $(window).resize(() => {
+      this.calcSizes();
     });
 
-    comparator.$el.on('mousemove', function (e) {
-      comparator.moveDivider(e);
+    this.$el.on('mousemove', (e) => {
+      this.moveDivider(e);
     });
 
     if (this.$el.data('return')) {
-      comparator.$el.on('mouseleave', function () {
-        comparator.centerDivider();
+      this.$el.on('mouseleave', () => {
+        this.centerDivider();
       });
     }
   }
 
   Comparator.prototype.moveDivider = function(e) {
-    var mouseX = Math.round(this.getRelativeMouseX(e));
+    const mousePosition = {
+      x: Math.round(this.width - (e.clientX - this.offsets.left)),
+      y: Math.round(this.height - (e.clientY - this.offsets.top)),
+    };
 
-    this.$rightSide.removeClass('centered');
-    this.$rightSide.css('width', mouseX);
+    this.$secondSide.removeClass(CENTERED_CLASS);
+    this.$secondSide.css('width', mousePosition.x);
   }
 
   Comparator.prototype.centerDivider = function() {
-    var center = this.width / 2;
+    const center = this.width / 2;
 
-    this.$rightSide.addClass('centered');
-    this.$rightSide.css('width', center);
-  }
-
-  Comparator.prototype.getRelativeMouseX = function(e) {
-    return Math.min(this.$el.offset().left + this.width - e.clientX, this.width);
+    this.$secondSide.addClass(CENTERED_CLASS);
+    this.$secondSide.css('width', center);
   }
 
   $('.comparator').each(function() {
